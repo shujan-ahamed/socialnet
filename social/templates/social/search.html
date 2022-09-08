@@ -1,0 +1,100 @@
+{% extends 'landing/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5 ">
+        <div class="col-md-5 col-sm-6">
+            <a href="{% url 'post-list' %}" class="btn btn-light">Back To Feed</a>
+        </div>
+    </div>
+    <div>
+        
+        <div class="row justify-content-center mt-3">
+            <h2>Result for searching '{{query}}':</h2>
+            
+        
+            <div class="col-md-8 col-sm-12 border-bottom position-relative shadow bg-white rounded">
+                <h3>Profiles</h3> <hr>
+                {% for profile in profile_list %}
+                
+                <div class="">
+                    <a href="{% url 'profile' profile.pk %}">
+                        <img class="rounded-circle post-img" src="{{ profile.picture.url }}" alt="" height= '40px' width='40px'>
+                    </a>
+                    <p class="pt-1">
+                        <a class="post-update-link" href="{% url 'profile' profile.pk %}">{{ profile.user }}</a>&nbsp <small>{{ post.created_on }}</small>
+                        &nbsp
+                    </p>
+                </div>
+                {% if profile.location %}
+                    <p>{{ profile.location }}</p>
+                {% endif %}
+                <p>Followers: {{ profile.followers.all.count }}</p>
+                <br>
+                {% empty %}
+                    <p>Not found</p>
+                {% endfor %}
+                
+            </div>
+        </div>      
+        
+    </div>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 col-sm-12 border-bottom shadow bg-white rounded p-3">
+            <h3>Posts</h3> <hr>
+            {% for post in post_list %}
+            <div class="">
+                <a href="{% url 'profile' post.author.profile.pk %}">
+                    <img class="rounded-circle post-img" src="{{ post.author.profile.picture.url }}" alt="" height= '30px' width='30px'>
+                </a>
+                <p class="">
+                    <a class="post-update-link" href="{% url 'profile' post.author.profile.pk %}">{{ post.author }}</a>&nbsp <small>{{ post.created_on }}</small>
+                    &nbsp
+                
+                {% if post.author == request.user %}
+                    <span>
+                        <a class="post-update-link" href="{% url 'post-edit' post.pk %}">
+                            <i class="far fa-edit"></i> 
+                        </a>
+                        <a class="post-update-link" href="{% url 'post-delete' post.pk %}">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </span>
+                {% endif %}
+                    
+                </p>
+            </div>
+            <div class="position-relative pt-2">
+                <p>{{ post.body }}</p>
+                <a href="{% url 'post-detail' post.pk %}" class="stretched-link"></a>
+            </div>
+            
+            
+            
+            <div class="d-flex flex-row">
+                <form method="POST" action="{% url 'like' post.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                        <i class="far fa-thumbs-up"> <span>{{ post.likes.all.count }}</span></i>
+                    </button>
+                </form>
+
+                <form method="POST" action="{% url 'dislike' post.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                        <i class="far fa-thumbs-down"> <span>{{ post.dislikes.all.count }}</span></i>
+                    </button>
+                </form>
+            </div>
+            <hr>
+            {% empty %}
+                <p>Not found</p>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,44 @@
+{% extends 'landing/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5 ">
+        <div class="col-md-5 col-sm-6">
+            <a href="{% url 'profile' profile.pk %}" class="btn btn-light">Back To profile</a>
+        </div>
+    </div>
+    <div>
+        
+        <div class="row justify-content-center mt-3">
+            
+            <div class="col-md-8 col-sm-12 border-bottom position-relative shadow bg-white rounded">
+                
+                {% if profile.name %}
+                <h3>Followers of @{{profile.name}}</h3>
+                {% else %}
+                <h3>Followers of @{{profile.user.username}}</h3>
+                    
+                {% endif %}
+                <hr>
+                    
+
+                {% for follower in followers %}
+                <div class="row justify-content-left">
+                    <p >
+                        <a href="{% url 'profile' follower.profile.pk %}">
+                            <img class="rounded-circle post-img" src="{{ follower.profile.picture.url }}" alt="" height= '60px' width='60px'>
+                        </a>
+                        <a class="post-text-new post-update-link" href="{% url 'profile' follower.profile.pk %}">{{ follower.username }}</a>
+                    </p>
+                    {% empty %}
+                        <p>Not found</p>
+                </div>
+                {% endfor %}
+                
+            </div>
+        </div>      
+    </div>
+
+    
+</div>
+{% endblock content %}

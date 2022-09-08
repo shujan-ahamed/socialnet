@@ -1,0 +1,38 @@
+{% extends 'landing/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row  mt-5">
+        <div class="col-md-5 col-sm-6 ">
+        <a href="{% url 'post-detail'  object.pk %}" class="bt btn-light"><i class="fas fa-reply"></i> Back to post</a>
+
+        </div>
+    </div>
+    
+    
+  
+    
+    <div class="row d-flex justify-content-center mt-5">
+        <div class="col-md-5 col-sm-12 border-bottom">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <p>Are you sure you want to delete this post?</p>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-danger mt-3">Confirm</button>
+            </div>
+        </form>
+
+        </div>
+    </div>
+
+    
+    
+
+</div>
+
+{% endblock content %}
+    
+
+    
